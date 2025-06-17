@@ -14,11 +14,6 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Check if user is logged in
-  if (!authLoading && !user.isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
-  
   // Load user's memes
   useEffect(() => {
     const loadUserMemes = async () => {
@@ -45,6 +40,11 @@ const ProfilePage = () => {
       loadUserMemes();
     }
   }, [user.id, user.isLoggedIn]);
+  
+  // Check if user is logged in
+  if (!authLoading && !user.isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
   
   // Render loading state while auth is being checked
   if (authLoading) {

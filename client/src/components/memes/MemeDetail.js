@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { FaArrowUp, FaArrowDown, FaBid, FaTag, FaUser, FaDollarSign, FaHistory } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaGavel, FaTag, FaUser, FaDollarSign, FaHistory } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { socket, joinMemeRoom } from '../../utils/socketClient';
 import { getMemeById, getBidsByMemeId, createBid, voteOnMeme } from '../../services/api';
@@ -281,7 +281,7 @@ const MemeDetail = () => {
           <div className="lg:w-1/3 border-t lg:border-l lg:border-t-0 border-neon-blue/20 bg-cyber-black/30">
             <div className="p-6">
               <h3 className="font-display text-xl mb-4 flex items-center">
-                <FaBid className="mr-2 text-neon-green" />
+                <FaGavel className="mr-2 text-neon-green" />
                 <span>Place your bid</span>
               </h3>
               
