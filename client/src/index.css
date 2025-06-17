@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import cyberpunk-style fonts */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+/* Global styles */
+body {
+  margin: 0;
+  font-family: 'Share Tech Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #121212;
+  color: #f0f0f0;
+  overflow-x: hidden;
+}
+
+/* Custom Cyberpunk Utilities */
+@layer components {
+  /* Neon text effects */
+  .text-neon-pink {
+    color: #FF2A6D;
+    text-shadow: 0 0 5px #FF2A6D, 0 0 10px #FF2A6D;
+  }
+
+  .text-neon-blue {
+    color: #01C5FC;
+    text-shadow: 0 0 5px #01C5FC, 0 0 10px #01C5FC;
+  }
+
+  .text-neon-green {
+    color: #05FFA1;
+    text-shadow: 0 0 5px #05FFA1, 0 0 10px #05FFA1;
+  }
+
+  .text-neon-yellow {
+    color: #FFFC59;
+    text-shadow: 0 0 5px #FFFC59, 0 0 10px #FFFC59;
+  }
+
+  /* CRT screen effect */
+  .crt-screen {
+    position: relative;
+    background-color: #121212;
+    overflow: hidden;
+    border-radius: 0.375rem;
+    box-shadow: 0 0 20px rgba(1, 197, 252, 0.5);
+  }
+
+  .crt-screen::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Glitch text effect */
+  .glitch-text {
+    @apply relative inline-block;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    @apply absolute top-0 left-0 w-full h-full;
+    content: attr(data-text);
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .glitch-text::before {
+    @apply text-neon-pink;
+    left: -1px;
+    animation: glitch-animation 2s infinite linear alternate-reverse;
+  }
+
+  .glitch-text::after {
+    @apply text-neon-blue;
+    left: 1px;
+    animation: glitch-animation 3s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-animation {
+    0% { clip: rect(44px, 9999px, 56px, 0); }
+    5% { clip: rect(12px, 9999px, 26px, 0); }
+    10% { clip: rect(42px, 9999px, 78px, 0); }
+    15% { clip: rect(56px, 9999px, 23px, 0); }
+    20% { clip: rect(94px, 9999px, 5px, 0); }
+    25% { clip: rect(77px, 9999px, 57px, 0); }
+    30% { clip: rect(89px, 9999px, 65px, 0); }
+    35% { clip: rect(6px, 9999px, 29px, 0); }
+    40% { clip: rect(69px, 9999px, 21px, 0); }
+    45% { clip: rect(9px, 9999px, 55px, 0); }
+    50% { clip: rect(56px, 9999px, 93px, 0); }
+    55% { clip: rect(32px, 9999px, 10px, 0); }
+    60% { clip: rect(70px, 9999px, 23px, 0); }
+    65% { clip: rect(75px, 9999px, 67px, 0); }
+    70% { clip: rect(39px, 9999px, 34px, 0); }
+    75% { clip: rect(5px, 9999px, 73px, 0); }
+    80% { clip: rect(50px, 9999px, 25px, 0); }
+    85% { clip: rect(99px, 9999px, 32px, 0); }
+    90% { clip: rect(19px, 9999px, 99px, 0); }
+    95% { clip: rect(76px, 9999px, 26px, 0); }
+    100% { clip: rect(57px, 9999px, 9px, 0); }
+  }
+
+  /* Cyberpunk button */
+  .btn-cyber {
+    @apply relative inline-flex items-center justify-center
+           py-2 px-6 font-display font-bold text-lg uppercase tracking-wider
+           bg-transparent border-2 border-neon-blue overflow-hidden
+           transition-all duration-300;
+    background: linear-gradient(to right, transparent 50%, #01C5FC 50%);
+    background-size: 200% 100%;
+    background-position: 0 0;
+  }
+
+  .btn-cyber:hover {
+    @apply text-black;
+    background-position: -100% 0;
+  }
+
+  .btn-cyber:before {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-full opacity-30;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    transform: translateX(-100%);
+    transition: 0.3s;
+  }
+
+  .btn-cyber:hover:before {
+    transform: translateX(100%);
+  }
+}
+
