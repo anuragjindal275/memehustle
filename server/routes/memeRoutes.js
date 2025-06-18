@@ -84,31 +84,67 @@ router.get('/:id', async (req, res) => {
 // Create a new meme
 router.post('/', async (req, res) => {
   try {
-    const { title, image_url, tags, owner_id } = req.body;
+    console.log('📝 Received meme creation request');
+    const { title, image, image_url, tags, owner_id } = req.body;
     
-    if (!title || !image_url || !Array.isArray(tags) || !owner_id) {
-      return res.status(400).json({ error: 'Title, image URL, tags array, and owner ID are required' });
+    if (!title) {
+      console.error('Missing title in request');
+      return res.status(400).json({ error: 'Title is required' });
+    }
+    
+    // Handle either image (base64) or image_url 
+    const finalImageUrl = image_url || image;
+    if (!finalImageUrl) {
+      console.error('Missing image/image_url in request');
+      return res.status(400).json({ error: 'Image is required' });
+    }
+    
+    if (!Array.isArray(tags)) {
+      console.error('Tags is not an array:', tags);
+      return res.status(400).json({ error: 'Tags must be an array' });
+    }
+    
+    if (!owner_id) {
+      console.error('Missing owner_id in request');
+      return res.status(400).json({ error: 'Owner ID is required' });
     }
     
     // Generate AI caption and vibe analysis
-    const caption = await generateMemeCaption(title, tags);
-    const vibe_analysis = await generateVibeAnalysis(title, tags);
+    console.log('Generating AI caption and vibe analysis...');
+    let caption, vibe_analysis;
+    try {
+      caption = await generateMemeCaption(title, tags);
+      console.log('Caption generated:', caption);
+      
+      vibe_analysis = await generateVibeAnalysis(title, tags);
+      console.log('Vibe analysis generated:', vibe_analysis);
+    } catch (aiError) {
+      console.error('Error generating AI content:', aiError);
+      // Continue with fallback values if AI fails
+      caption = caption || "Cyberpunk vibes activated!";
+      vibe_analysis = vibe_analysis || "Digital Dystopia";
+    }
     
+    // Create a minimalist meme object with only essential fields that exist in the DB
     const memeData = {
       title,
-      image_url,
+      image_url: finalImageUrl,
       tags,
       owner_id,
-      caption,
-      vibe_analysis,
       upvotes: 0,
       downvotes: 0
+      // Removed problematic fields that don't exist in DB schema
     };
     
+    console.log('Creating meme with data:', JSON.stringify(memeData, null, 2));
     const newMeme = await createMeme(memeData);
+    console.log('Meme created successfully:', JSON.stringify(newMeme, null, 2));
     res.status(201).json(newMeme);
   } catch (error) {
-    console.error('Error creating meme:', error);
+    console.error('Error creating meme - DETAILED ERROR:', error);
+    if (error.message) console.error('Error message:', error.message);
+    if (error.stack) console.error('Error stack:', error.stack);
+    if (error.code) console.error('Error code:', error.code);
     res.status(500).json({ error: 'Failed to create meme' });
   }
 });
