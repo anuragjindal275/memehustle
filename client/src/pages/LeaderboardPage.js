@@ -16,7 +16,7 @@ const LeaderboardPage = () => {
     socket.connect();
     joinLeaderboardRoom();
     
-    // Listen for leaderboard updates
+    
     socket.on('leaderboard_update', handleLeaderboardUpdate);
     
     return () => {
@@ -65,7 +65,7 @@ const LeaderboardPage = () => {
     show: { opacity: 1, y: 0 }
   };
   
-  // Generate rank badges
+  
   const getRankBadge = (index) => {
     switch (index) {
       case 0:

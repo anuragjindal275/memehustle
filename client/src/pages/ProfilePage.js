@@ -41,12 +41,12 @@ const ProfilePage = () => {
     }
   }, [user.id, user.isLoggedIn]);
   
-  // Check if user is logged in
+  
   if (!authLoading && !user.isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
   
-  // Render loading state while auth is being checked
+
   if (authLoading) {
     return (
       <Layout>

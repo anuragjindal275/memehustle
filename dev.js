@@ -1,9 +1,9 @@
-// Simple script to run both frontend and backend concurrently
+
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-// Helper to print colored text
+
 const colors = {
   reset: '\x1b[0m',
   red: '\x1b[31m',
@@ -14,7 +14,7 @@ const colors = {
   cyan: '\x1b[36m'
 };
 
-// Check if we have the required folders
+
 if (!fs.existsSync(path.join(__dirname, 'server'))) {
   console.error(`${colors.red}Error: Server folder not found!${colors.reset}`);
   process.exit(1);
@@ -25,7 +25,7 @@ if (!fs.existsSync(path.join(__dirname, 'client'))) {
   process.exit(1);
 }
 
-// ASCII art for cyberpunk startup
+
 console.log(`${colors.cyan}
 ╔═╗╦ ╦╔╗ ╔═╗╦═╗╔═╗╦ ╦╔╗╔╦╔═  ╔╦╗╔═╗╔╦╗╔═╗  ╦ ╦╦ ╦╔═╗╔╦╗╦  ╔═╗
 ║  ╚╦╝╠╩╗║╣ ╠╦╝╠═╝║ ║║║║╠╩╗  ║║║║╣ ║║║║╣   ╠═╣║ ║╚═╗ ║ ║  ║╣ 
@@ -34,21 +34,21 @@ ${colors.reset}`);
 
 console.log(`${colors.yellow}Starting development servers...${colors.reset}`);
 
-// Start the backend server
+
 const serverProcess = spawn('node', ['index.js'], {
   cwd: path.join(__dirname, 'server'),
   stdio: 'pipe',
   shell: true
 });
 
-// Start the frontend client
+
 const clientProcess = spawn('npm', ['start'], {
   cwd: path.join(__dirname, 'client'),
   stdio: 'pipe',
   shell: true
 });
 
-// Handle backend output
+
 serverProcess.stdout.on('data', (data) => {
   console.log(`${colors.green}[SERVER] ${colors.reset}${data}`);
 });
@@ -57,7 +57,7 @@ serverProcess.stderr.on('data', (data) => {
   console.error(`${colors.red}[SERVER ERROR] ${colors.reset}${data}`);
 });
 
-// Handle frontend output
+
 clientProcess.stdout.on('data', (data) => {
   console.log(`${colors.blue}[CLIENT] ${colors.reset}${data}`);
 });
@@ -66,7 +66,7 @@ clientProcess.stderr.on('data', (data) => {
   console.error(`${colors.magenta}[CLIENT] ${colors.reset}${data}`);
 });
 
-// Handle process exit
+
 const cleanup = () => {
   console.log(`${colors.yellow}\nShutting down development servers...${colors.reset}`);
   serverProcess.kill();
@@ -76,7 +76,7 @@ const cleanup = () => {
 process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);
 
-// Handle process exit
+
 serverProcess.on('close', (code) => {
   console.log(`${colors.red}[SERVER] Process exited with code ${code}${colors.reset}`);
   cleanup();

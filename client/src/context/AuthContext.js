@@ -1,10 +1,10 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { getUsers } from '../services/api';
 
-// Create the authentication context
+
 const AuthContext = createContext();
 
-// Mock user data (in a real application, this would come from a proper auth system)
+
 const initialUser = {
   id: null,
   username: '',
@@ -105,5 +105,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the auth context
+
 export const useAuth = () => useContext(AuthContext);

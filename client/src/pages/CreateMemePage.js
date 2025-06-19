@@ -21,13 +21,13 @@ const CreateMemePage = () => {
   const [generateVibe, setGenerateVibe] = useState(true);
   const [selectedEffect, setSelectedEffect] = useState('none');
   
-  // Handle image file selection
+  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
       
-      // Create image preview
+    
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -36,7 +36,7 @@ const CreateMemePage = () => {
     }
   };
 
-  // Convert image file to base64 for API submission
+
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -46,7 +46,7 @@ const CreateMemePage = () => {
     });
   };
   
-  // Handle form submission
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -55,7 +55,7 @@ const CreateMemePage = () => {
       return;
     }
     
-    // Validate form
+   
     if (!title.trim()) {
       setError('Please enter a title');
       return;
@@ -66,7 +66,7 @@ const CreateMemePage = () => {
       return;
     }
     
-    // Process tags
+    
     const tagList = tags
       .split(',')
       .map(tag => tag.trim())
@@ -76,10 +76,10 @@ const CreateMemePage = () => {
     setError(null);
     
     try {
-      // Convert image to base64
+     
       const base64Image = await getBase64(imageFile);
       
-      // Create meme object
+   
       const memeData = {
         title: title.trim(),
         image: base64Image,
@@ -90,10 +90,10 @@ const CreateMemePage = () => {
         effect: selectedEffect
       };
       
-      // Submit to API
+    
       const newMeme = await createMeme(memeData);
       
-      // Redirect to the new meme page
+    
       navigate(`/meme/${newMeme.id}`);
     } catch (err) {
       console.error('Failed to create meme:', err);
@@ -202,7 +202,7 @@ const CreateMemePage = () => {
               </div>
             </div>
             
-            {/* Tags Field */}
+           
             <div className="mb-6">
               <label htmlFor="tags" className="block text-neon-blue mb-2 font-display">
                 <FaTag className="inline mr-2" />
@@ -218,7 +218,7 @@ const CreateMemePage = () => {
               />
             </div>
             
-            {/* AI Features */}
+          
             <div className="mb-6 p-4 border border-neon-yellow/30 rounded bg-cyber-black/50">
               <h3 className="flex items-center text-neon-yellow mb-3 font-display">
                 <FaRobot className="mr-2" />
@@ -279,7 +279,7 @@ const CreateMemePage = () => {
               </div>
             )}
             
-            {/* Submit Button */}
+      
             <div className="flex justify-center">
               <button
                 type="submit"

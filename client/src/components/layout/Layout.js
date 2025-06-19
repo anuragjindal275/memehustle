@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
       </main>
       <Footer />
       
-      {/* Scanline effect overlay */}
+     
       <div 
         className="fixed inset-0 pointer-events-none z-10 opacity-[0.03]"
         style={{ 

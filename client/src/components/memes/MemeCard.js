@@ -14,13 +14,13 @@ const MemeCard = ({ meme, showBidButton = true }) => {
   const [isVoting, setIsVoting] = useState(false);
   const [glitching, setGlitching] = useState(false);
 
-  // Trigger glitch effect randomly or on interaction
+ 
   const triggerGlitch = () => {
     setGlitching(true);
     setTimeout(() => setGlitching(false), 1000);
   };
 
-  // Handle voting
+
   const handleVote = async (voteType) => {
     if (!user.isLoggedIn) return;
     
@@ -34,7 +34,7 @@ const MemeCard = ({ meme, showBidButton = true }) => {
         downvotes: updatedMeme.downvotes
       });
       
-      // Trigger glitch effect
+      
       triggerGlitch();
     } catch (error) {
       console.error('Failed to vote:', error);
@@ -52,7 +52,7 @@ const MemeCard = ({ meme, showBidButton = true }) => {
       whileHover={{ scale: 1.02 }}
       onClick={() => Math.random() > 0.7 && triggerGlitch()}
     >
-      {/* Meme header */}
+      
       <div className="p-3 flex justify-between items-center border-b border-neon-blue/20">
         <h3 className={`font-display text-lg ${glitching ? 'animate-glitch' : ''}`}>
           {meme.title}
@@ -65,7 +65,7 @@ const MemeCard = ({ meme, showBidButton = true }) => {
         </div>
       </div>
       
-      {/* Meme image with CRT effect */}
+ 
       <Link to={`/meme/${meme.id}`} className="block relative">
         <div 
           className={`aspect-square overflow-hidden crt-screen ${glitching ? 'animate-glitch' : ''}`}
@@ -82,7 +82,7 @@ const MemeCard = ({ meme, showBidButton = true }) => {
           />
         </div>
         
-        {/* Caption overlay */}
+     
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cyber-black/90 to-transparent p-3">
           <p className="text-xs text-neon-pink font-mono">
             {meme.caption || "Loading caption..."}
@@ -90,9 +90,9 @@ const MemeCard = ({ meme, showBidButton = true }) => {
         </div>
       </Link>
       
-      {/* Meme footer */}
+     
       <div className="p-3 flex justify-between items-center">
-        {/* Vote buttons */}
+      
         <div className="flex items-center space-x-3">
           <button 
             className={`flex items-center space-x-1 ${isVoting ? 'opacity-50' : 'hover:text-neon-green'}`}
@@ -112,7 +112,7 @@ const MemeCard = ({ meme, showBidButton = true }) => {
           </button>
         </div>
         
-        {/* Action buttons */}
+   
         <div className="flex items-center">
           {showBidButton && (
             <Link 
@@ -124,8 +124,7 @@ const MemeCard = ({ meme, showBidButton = true }) => {
           )}
         </div>
       </div>
-      
-      {/* Tags */}
+
       <div className="px-3 pb-3 flex flex-wrap gap-1">
         {meme.tags && meme.tags.map((tag, index) => (
           <Link 

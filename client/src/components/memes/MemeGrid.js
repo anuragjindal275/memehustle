@@ -3,7 +3,7 @@ import MemeCard from './MemeCard';
 import { motion } from 'framer-motion';
 
 const MemeGrid = ({ memes, loading, error }) => {
-  // Loading state
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -45,7 +45,7 @@ const MemeGrid = ({ memes, loading, error }) => {
     );
   }
 
-  // No memes state
+  
   if (!memes || memes.length === 0) {
     return (
       <div className="text-center py-12">
@@ -55,7 +55,7 @@ const MemeGrid = ({ memes, loading, error }) => {
     );
   }
 
-  // Container animation
+
   const container = {
     hidden: { opacity: 0 },
     show: {

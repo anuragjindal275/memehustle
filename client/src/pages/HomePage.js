@@ -15,12 +15,12 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   
-  // Connect to WebSocket for real-time updates
+  
   useEffect(() => {
     socket.connect();
     joinLeaderboardRoom();
     
-    // Listen for meme updates
+   
     socket.on('leaderboard_update', handleLeaderboardUpdate);
     
     return () => {
@@ -101,7 +101,7 @@ const HomePage = () => {
     setIsSearching(false);
   };
   
-  // Handle real-time leaderboard updates
+  
   const handleLeaderboardUpdate = (updatedMemes) => {
     if (activeTab === 'trending' && !isSearching) {
       setMemes(updatedMemes);
@@ -111,7 +111,7 @@ const HomePage = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
+      
         <motion.div 
           className="text-center mb-12"
           initial={{ opacity: 0, y: -20 }}
@@ -209,7 +209,7 @@ const HomePage = () => {
           </div>
         </div>
         
-        {/* Search Results Indicator */}
+       
         {isSearching && (
           <div className="mb-6 text-center">
             <p className="text-neon-blue">

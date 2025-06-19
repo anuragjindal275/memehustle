@@ -8,7 +8,7 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   
-  // Change navbar style on scroll
+
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10;
@@ -33,7 +33,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+        
           <Link to="/" className="flex items-center space-x-2">
             <div className="text-2xl font-display font-bold">
               <span className="text-neon-pink">Meme</span>
@@ -52,7 +52,7 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Navigation */}
+        
           <div className="flex items-center space-x-1 md:space-x-4">
             <Link to="/" className="p-2 text-gray-300 hover:text-neon-blue">
               <FaHome className="text-lg md:text-xl" />

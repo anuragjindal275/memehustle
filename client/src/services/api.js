@@ -35,7 +35,7 @@ export const getUserById = (id) => api.get(`/users/${id}`);
 export const updateUserCredits = (id, credits) => 
   api.patch(`/users/${id}/credits`, { credits });
 
-// Handle errors globally
+
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {

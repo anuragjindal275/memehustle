@@ -27,7 +27,7 @@ export const updateUserCredits = async (userId, creditsAmount) => {
   return data;
 };
 
-// Meme related functions
+
 export const getAllMemes = async () => {
   try {
     const { data, error } = await supabase
@@ -37,10 +37,10 @@ export const getAllMemes = async () => {
     
     if (error) throw error;
     
-    // If no memes found, return empty array
+
     if (!data || data.length === 0) return [];
     
-    // Manually fetch user info for each meme
+  
     const memesWithOwners = await Promise.all(
       data.map(async (meme) => {
         if (meme.owner_id) {
@@ -79,7 +79,7 @@ export const getMemeById = async (memeId) => {
     if (error) {
       console.error(`Error fetching meme by ID ${memeId}:`, error);
       
-      // Try a simpler version in case of schema mismatch
+      
       try {
         const { data: retryData, error: retryError } = await supabase
           .from('memes')
@@ -102,7 +102,7 @@ export const getMemeById = async (memeId) => {
       return null;
     }
     
-    // Get owner info separately if we have an owner_id
+
     if (data.owner_id) {
       const { data: userData, error: userError } = await supabase
         .from('users')
@@ -115,7 +115,7 @@ export const getMemeById = async (memeId) => {
       }
     }
 
-    // Add default caption if one doesn't exist
+
     if (!data.caption) {
       const defaultCaptions = [
         "A wild meme appears!",
@@ -146,10 +146,10 @@ export const getTopMemes = async (limit = 10) => {
     
     if (error) throw error;
     
-    // If no memes found, return empty array
+   
     if (!data || data.length === 0) return [];
     
-    // Manually fetch user info for each meme
+   
     const memesWithOwners = await Promise.all(
       data.map(async (meme) => {
         if (meme.owner_id) {
@@ -274,7 +274,7 @@ export const getBidsByMemeId = async (memeId) => {
             }
           } catch (userFetchError) {
             console.warn(`Failed to fetch user info for bid user ${userId}:`, userFetchError);
-            // Return bid without user info rather than failing
+          
           }
         }
         return bid;
@@ -292,13 +292,11 @@ export const createBid = async (bidData) => {
   try {
     console.log(`Creating bid for meme ${bidData.meme_id} by user ${bidData.user_id} with amount ${bidData.credits}`);
     
-    // Figure out which column names are used in the actual DB schema
+ 
     let bidAmountField = 'amount'; // Default alternative
     let userIdField = 'user_id'; // Default
     
     try {
-      // Check different possible column names
-      // First check if credits exists
       const creditsCheckResult = await supabase.from('bids').select('credits').limit(1);
       if (!creditsCheckResult.error) {
         bidAmountField = 'credits';
@@ -338,15 +336,15 @@ export const createBid = async (bidData) => {
       // Proceed with defaults
     }
     
-    // Create a sanitized bid data object with the correct field names
+    
     const sanitizedBidData = {
       meme_id: bidData.meme_id
     };
     
-    // Set the bid amount using the discovered field name
+  
     sanitizedBidData[bidAmountField] = bidData.credits;
     
-    // Set the user ID using the discovered field name
+ 
     sanitizedBidData[userIdField] = bidData.user_id;
     
     console.log('Inserting bid with data:', JSON.stringify(sanitizedBidData, null, 2));
@@ -377,12 +375,12 @@ export const createBid = async (bidData) => {
   }
 };
 
-// Vote related functions - SIMPLIFIED VERSION that bypasses the votes table
+
 export const voteOnMeme = async (memeId, userId, voteType) => {
   try {
     console.log(`Attempting to vote on meme ${memeId} by user ${userId} with vote type ${voteType}`);
     
-    // Get the current meme data first
+    
     const { data: memeData, error: memeError } = await supabase
       .from('memes')
       .select('*')
@@ -398,24 +396,21 @@ export const voteOnMeme = async (memeId, userId, voteType) => {
       throw new Error(`Meme with ID ${memeId} not found`);
     }
     
-    // Store the current vote counts
+  
     let { upvotes = 0, downvotes = 0 } = memeData;
     
-    // Track whether the user has a vote in session storage (simulating a vote table)
-    // This is just for UX so votes appear to stick during the session
-    // We'll use client-side JS to handle this in the actual app
+    
     
     if (voteType === true) {
-      // User is upvoting
+     
       upvotes++;
       console.log(`Incrementing upvotes to ${upvotes}`);
     } else {
-      // User is downvoting
       downvotes++;
       console.log(`Incrementing downvotes to ${downvotes}`);
     }
     
-    // Update the meme with new vote counts directly
+    
     const { data: updatedMeme, error: updateError } = await supabase
       .from('memes')
       .update({ 
@@ -439,7 +434,7 @@ export const voteOnMeme = async (memeId, userId, voteType) => {
   }
 };
 
-// Helper function to determine which field name to use for user ID
+
 async function determineUserIdField(tableName) {
   try {
     // Try user_id first
