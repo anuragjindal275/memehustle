@@ -88,35 +88,28 @@ router.post('/', async (req, res) => {
     const { title, image, image_url, tags, owner_id } = req.body;
     
     if (!title) {
-      console.error('Missing title in request');
       return res.status(400).json({ error: 'Title is required' });
     }
     
-    // Handle either image (base64) or image_url 
+    if (!image_url && !image) {
+      return res.status(400).json({ error: 'Image or image URL is required' });
+    }
+    
+    // Prepare basic meme data
+    // Make sure tags is an array
+    const normalizedTags = Array.isArray(tags) ? tags : tags ? [tags] : [];
+    
+    // Normalize image URL
     const finalImageUrl = image_url || image;
-    if (!finalImageUrl) {
-      console.error('Missing image/image_url in request');
-      return res.status(400).json({ error: 'Image is required' });
-    }
-    
-    if (!Array.isArray(tags)) {
-      console.error('Tags is not an array:', tags);
-      return res.status(400).json({ error: 'Tags must be an array' });
-    }
-    
-    if (!owner_id) {
-      console.error('Missing owner_id in request');
-      return res.status(400).json({ error: 'Owner ID is required' });
-    }
     
     // Generate AI caption and vibe analysis
     console.log('Generating AI caption and vibe analysis...');
     let caption, vibe_analysis;
     try {
-      caption = await generateMemeCaption(title, tags);
+      caption = await generateMemeCaption(title, normalizedTags);
       console.log('Caption generated:', caption);
       
-      vibe_analysis = await generateVibeAnalysis(title, tags);
+      vibe_analysis = await generateVibeAnalysis(title, normalizedTags);
       console.log('Vibe analysis generated:', vibe_analysis);
     } catch (aiError) {
       console.error('Error generating AI content:', aiError);
@@ -125,15 +118,16 @@ router.post('/', async (req, res) => {
       vibe_analysis = vibe_analysis || "Digital Dystopia";
     }
     
-    // Create a minimalist meme object with only essential fields that exist in the DB
+    // Create a meme object with fields that exist in the DB
     const memeData = {
       title,
       image_url: finalImageUrl,
-      tags,
+      tags: normalizedTags,
       owner_id,
       upvotes: 0,
-      downvotes: 0
-      // Removed problematic fields that don't exist in DB schema
+      downvotes: 0,
+      caption, // Include caption
+      vibe_analysis // Include vibe analysis
     };
     
     console.log('Creating meme with data:', JSON.stringify(memeData, null, 2));
@@ -199,6 +193,49 @@ router.delete('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error deleting meme:', error);
     res.status(500).json({ error: 'Failed to delete meme' });
+  }
+});
+
+// Generate or regenerate caption and vibe for a meme
+router.post('/:id/caption', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const meme = await getMemeById(id);
+    
+    if (!meme) {
+      return res.status(404).json({ error: 'Meme not found' });
+    }
+    
+    // Generate caption and vibe using Gemini API
+    console.log('Regenerating AI caption and vibe for meme:', id);
+    const tags = Array.isArray(meme.tags) ? meme.tags : meme.tags ? [meme.tags] : [];
+    
+    // Force new generation bypassing cache (by adding timestamp to make cache key unique)
+    const uniqueTitle = meme.title + '-' + Date.now();
+    
+    // Generate new caption and vibe
+    const caption = await generateMemeCaption(uniqueTitle, tags);
+    const vibe_analysis = await generateVibeAnalysis(uniqueTitle, tags);
+    
+    console.log('New caption generated:', caption);
+    console.log('New vibe generated:', vibe_analysis);
+    
+    // Update the meme with new caption and vibe
+    const updatedMeme = await updateMeme(id, { caption, vibe_analysis });
+    
+    if (!updatedMeme) {
+      return res.status(500).json({ error: 'Failed to update meme with new caption' });
+    }
+    
+    res.json({ 
+      meme: updatedMeme,
+      caption,
+      vibe_analysis,
+      message: 'Caption and vibe updated successfully' 
+    });
+  } catch (error) {
+    console.error('Error generating caption/vibe:', error);
+    res.status(500).json({ error: 'Failed to generate caption/vibe' });
   }
 });
 

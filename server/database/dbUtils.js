@@ -420,8 +420,7 @@ export const voteOnMeme = async (memeId, userId, voteType) => {
       .from('memes')
       .update({ 
         upvotes, 
-        downvotes,
-        total_votes: upvotes + downvotes
+        downvotes
       })
       .eq('id', memeId)
       .select();

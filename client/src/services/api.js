@@ -19,6 +19,7 @@ export const searchMemes = (query) => api.get(`/memes/search?query=${query}`);
 export const createMeme = (memeData) => api.post('/memes', memeData);
 export const updateMeme = (id, memeData) => api.put(`/memes/${id}`, memeData);
 export const deleteMeme = (id) => api.delete(`/memes/${id}`);
+export const regenerateCaption = (id) => api.post(`/memes/${id}/caption`);
 
 // Bid APIs
 export const getBidsByMemeId = (memeId) => api.get(`/bids/meme/${memeId}`);
