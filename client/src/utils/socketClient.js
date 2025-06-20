@@ -1,7 +1,9 @@
 import { io } from 'socket.io-client';
 
 // Create a Socket.io client with the server URL
-const socket = io('http://localhost:5000', {
+// Use environment variable or fallback to localhost for development
+const SOCKET_URL = process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000';
+const socket = io(SOCKET_URL, {
   autoConnect: false, // We'll connect manually when needed
   reconnection: true,
   reconnectionAttempts: 5,
